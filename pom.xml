@@ -1,15 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.aspire</groupId>
 	<artifactId>FormProcessingBoot</artifactId>
 	<packaging>jar</packaging>
-	<version>1</version>
+	<version>${version.number}</version>	
 	<name>FormProcessing Using Spring Boot</name>
 	<url>www.java2aspire.com</url>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>1.8</java.version>		
+        <version.number>${git.commit.time}.${git.commit.id.abbrev}</version.number>
+
 	</properties>
 
 	<parent>
@@ -42,7 +45,19 @@
 		</dependency>
 	</dependencies>
 
-<!-- One day transfer test 5 -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>http://localhost:8888/repository/test-repo2/</url>
+			<layout>default</layout>
+		</snapshotRepository>
+		<repository>
+			<id>Test-Repo</id>
+			<url>http://localhost:8888/repository/test-repo2/</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+
 
 	<!--Build configuration -->
 	<build>
@@ -51,6 +66,28 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.5.1</version>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<serverId>Test-Repo</serverId>
+					<nexusUrl>http://localhost:8888/</nexusUrl>
+					<skipStaging>true</skipStaging>
+				</configuration>
+			</plugin>
+
+
+
 		</plugins>
 		<finalName>FormProcessing</finalName>
 	</build>
